@@ -1,0 +1,43 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: customer-service
+spec:
+  host: customer-service
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 100
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: login-service
+spec:
+  host: login-service
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 100
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: orchestrator-service
+spec:
+  host: orchestrator-service
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 100
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: gateway-service
+spec:
+  host: gateway-service
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 100

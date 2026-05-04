@@ -25,6 +25,8 @@ spec:
           value: "orders"
         - name: SPRING_DATASOURCE_PASSWORD
           value: "uptc2026"
+        - name: SPRING_KAFKA_BOOTSTRAP_SERVERS 
+          value: "kafka:9092"   
 ---
 apiVersion: v1
 kind: Service
