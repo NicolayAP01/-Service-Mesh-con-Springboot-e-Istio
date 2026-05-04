@@ -15,16 +15,10 @@ public class LoginService {
     @Autowired
     private LoginRepository loginRepository;
 
-    @Autowired
-    private LoginEventProducer loginEventProducer;
-
     // Método para crear un nuevo Login
     public Login createLogin(Login login) {
         // 1. Guardamos el Login en la base de datos local
         Login savedLogin = loginRepository.save(login);
-        
-        // 2. Disparamos el evento a Kafka avisando que se creó un Login
-        loginEventProducer.sendLoginEvent(savedLogin, "LOGIN_CREATED");
         
         return savedLogin;
     }

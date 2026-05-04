@@ -1,0 +1,6 @@
+spec:
+  template:
+    spec:
+      containers:
+      - name: kiali
+        imagePullPolicy: IfNotPresent

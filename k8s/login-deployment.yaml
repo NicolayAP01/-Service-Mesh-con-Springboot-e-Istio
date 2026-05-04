@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: login-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: login-service
+  template:
+    metadata:
+      labels:
+        app: login-service
+    spec:
+      containers:
+      - name: login-service
+        image: login-service:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8082
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: "jdbc:mysql://mysql:3306/orders?serverTimezone=GMT-5"
+        - name: SPRING_DATASOURCE_USERNAME
+          value: "orders"
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: "uptc2026"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: login-service
+spec:
+  selector:
+    app: login-service
+  ports:
+  - port: 8082
+    targetPort: 8082

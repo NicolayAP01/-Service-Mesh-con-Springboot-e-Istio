@@ -14,31 +14,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.uptc.edakafka.model.Customer;
-import co.edu.uptc.edakafka.service.CustomerEventProducer;
 import co.edu.uptc.edakafka.service.CustomerService;
-import co.edu.uptc.edakafka.utils.JsonUtils;
 
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
 
     @Autowired
-    private CustomerEventProducer customerEventProducer;
-    @Autowired
     private CustomerService customerService;
-
-    private static JsonUtils jsonUtils = new JsonUtils();
 
     @PostMapping("/add")
     public ResponseEntity<String> addCustomer(@RequestBody Customer customer) {
-        customerEventProducer.sendAddCustomerEvent(customer);
-        return ResponseEntity.ok("Evento ADD enviado para customer: " + customer.getDocument());
+        boolean saved = customerService.save(customer);
+        if (saved) {
+            return ResponseEntity.ok("Customer guardado correctamente: " + customer.getDocument());
+        }
+        return ResponseEntity.status(500).body("Error al guardar el customer");
     }
 
     @PutMapping("/edit")
     public ResponseEntity<String> editCustomer(@RequestBody Customer customer) {
-        customerEventProducer.sendEditCustomerEvent(customer);
-        return ResponseEntity.ok("Evento EDIT enviado para customer: " + customer.getDocument());
+        boolean saved = customerService.save(customer);
+        if (saved) {
+            return ResponseEntity.ok("Customer actualizado correctamente: " + customer.getDocument());
+        }
+        return ResponseEntity.status(500).body("Error al actualizar");
     }
 
     @DeleteMapping("/delete/{document}")
@@ -52,7 +52,6 @@ public class CustomerController {
 
     @GetMapping("/find/{document}")
     public ResponseEntity<?> findCustomerById(@PathVariable String document) {
-        customerEventProducer.sendFindByCustomerIDEvent(document);
         Customer customer = customerService.findById(document);
         if (customer == null) return ResponseEntity.status(404).body("Customer no encontrado: " + document);
         return ResponseEntity.ok(customer);
@@ -60,7 +59,6 @@ public class CustomerController {
 
     @GetMapping("/findall")
     public ResponseEntity<List<Customer>> findAllCustomers() {
-        customerEventProducer.sendFindAllOrdersEvent("findall");
         return ResponseEntity.ok(customerService.findAll());
     }
 }
