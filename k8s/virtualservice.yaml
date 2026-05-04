@@ -1,0 +1,34 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: app-routes
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - istio-system/app-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /customer
+      route:
+        - destination:
+            host: customer-service
+            port:
+              number: 80
+    - match:
+        - uri:
+            prefix: /api/logins
+      route:
+        - destination:
+            host: login-service
+            port:
+              number: 80
+    - match:
+        - uri:
+            prefix: /orchestrator
+      route:
+        - destination:
+            host: orchestrator-service
+            port:
+              number: 80

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orchestrator-service
+  labels:
+    app: orchestrator-service
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orchestrator-service
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: orchestrator-service
+        version: v1
+    spec:
+      containers:
+        - name: orchestrator-service
+          image: orchestrator-service:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
